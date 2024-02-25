@@ -16,7 +16,7 @@ RUN apt-get update \
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements.txt /requirements.txt
-RUN pip install -r /requirements.txt
+RUN pip install -r /requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 COPY ./compose/local/fastapi/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
