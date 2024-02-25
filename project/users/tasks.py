@@ -26,18 +26,39 @@ def sample_task(email):
     api_call(email)
 
 
-@shared_task(bind=True)
-def task_process_notification(self):
-    try:
-        if not random.choice([0, 1]):
-            # mimic random error
-            raise Exception()
+# 任务失败自动重试1: try-except 方式
+# @shared_task(bind=True)
+# def task_process_notification(self):
+#     try:
+#         if not random.choice([0, 1]):
+#             # mimic random error
+#             raise Exception()
 
-        # this would block the I/O
-        requests.post("https://httpbin.org/delay/5")
-    except Exception as e:
-        logger.error("exception raised, it would be retry after 5 seconds")
-        raise self.retry(exc=e, countdown=5)
+#         # this would block the I/O
+#         requests.post("https://httpbin.org/delay/5")
+#     except Exception as e:
+#         logger.error("exception raised, it would be retry after 5 seconds")
+#         raise self.retry(exc=e, countdown=5)
+
+# 任务失败自动重试2: 基于 class 的重试配置
+# class BaseTaskWithRetry(celery.Task):
+#     autoretry_for = (Exception, KeyError)
+#     retry_kwargs = {"max_retries": 5}
+#     retry_backoff = True
+
+
+# @shared_task(bind=True, base=BaseTaskWithRetry)
+# def task_process_notification(self):
+#     raise Exception()
+
+# 任务失败自动重试3: 基于装饰器
+@shared_task(bind=True, autoretry_for=(Exception,), retry_kwargs={"max_retries": 7, "countdown": 5})
+def task_process_notification(self):
+    if not random.choice([0, 1]):
+        # mimic random error
+        raise Exception()
+
+    requests.post("https://httpbin.org/delay/5")
 
 
 @task_postrun.connect
