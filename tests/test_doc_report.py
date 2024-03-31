@@ -12,7 +12,7 @@ class TestDocReport(unittest.TestCase):
         output_fn = "tests/fixtures/output/doc_report_output_text.docx"
         tpl_info = TemplateInfo(file_path=pathlib.Path(tpl_fn))
         render = DocReportRenderer(tpl_info, output_fn)
-        doc_data = [DocDataItem(name="test_text", type=DocDataItemType("text"), value="张三\n李四"),]
+        doc_data = [DocDataItem(name="test_text", type=DocDataItemType("text"), value="张三\n李四\n王五"),]
         render.render(doc_data)
 
     def test_doc_report_render_table(self):
