@@ -40,6 +40,7 @@ services:
     command: /start-celeryworker
     volumes:
       - .:/app
+      - report_files:/app/reprot_files
     env_file:
       - .env/.dev-sample
     depends_on:
@@ -78,3 +79,4 @@ services:
 
 volumes:
   postgres_data:
+  report_files:

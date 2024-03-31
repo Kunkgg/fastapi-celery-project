@@ -14,3 +14,6 @@ asyncio-redis==0.16.0
 broadcaster==0.2.0
 aioredis==2.0.1
 python-socketio==5.7.1
+docxtpl==0.16.8
+pandas==2.2.1
+openpyxl==3.1.2
